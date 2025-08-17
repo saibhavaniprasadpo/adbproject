@@ -50,4 +50,6 @@ This repository presents a **web-based Warehouse Management System** built using
 - Modular and extendable architecture for future enhancements  
 
 ## 👨‍💻 Team Members
-- Sai Bhavani Prasad Potukuchi - 700754838  
+- Sai Bhavani Prasad Potukuchi
+- Sravya Challagundla
+- Ashritha Reddy Katta
