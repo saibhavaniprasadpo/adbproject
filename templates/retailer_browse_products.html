@@ -1,0 +1,177 @@
+{% extends "navbar.html" %}
+
+{% block content %}
+    <title>Admin Browse Products</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .dashboard-header {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Grid Layout */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 1px solid #ecf0f1;
+            max-height: 400px;
+            min-height: 350px;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+        .card-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+            color: #3498db;
+        }
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .card-subtext {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 5px;
+            text-align: center;
+            padding: 0 10px;
+        }
+        .card-price, .card-quantity {
+            font-size: 16px;
+            margin-top: 10px;
+            color: #e74c3c;
+        }
+
+        /* Dropdown and Button Styles */
+        .quantity-dropdown {
+            padding: 5px;
+            font-size: 14px;
+            margin-top: 15px;
+            border-radius: 6px;
+            border: 1px solid #ecf0f1;
+            width: 80%;
+        }
+        .add-to-cart-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #27ae60;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 80%;
+            transition: background-color 0.3s ease;
+        }
+        .add-to-cart-btn:hover {
+            background-color: #2ecc71;
+        }
+
+        /* Responsive Layout */
+        @media screen and (max-width: 1200px) {
+            .card-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        @media screen and (max-width: 900px) {
+            .card-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media screen and (max-width: 600px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard-header">
+            Browse Products for Retailers
+        </div>
+
+        <!-- Card Grid for Products -->
+        <div class="card-grid">
+            {% for product in products %}
+                <div class="card">
+                    <!-- Product Icon based on Product Type -->
+                    <div class="card-icon">
+                        {% if product.product_type == 'printer' %}
+                            🖨️
+                        {% elif product.product_type == 'laptop' %}
+                            💻
+                        {% elif product.product_type == 'monitor' %}
+                            🖥️
+                        {% elif product.product_type == 'phone' %}
+                            📱
+                        {% elif product.product_type == 'peripheral' %}
+                            🎮
+                        {% else %}
+                            📦
+                        {% endif %}
+                    </div>
+                    <!-- Product Name -->
+                    <div class="card-title">{{ product.product_name }}</div>
+                    <!-- Product Description -->
+                    <div class="card-subtext">{{ product.description }}</div>
+                    <!-- Product Price -->
+                    <div class="card-price">Price: ${{ product.price }}</div>
+                    <!-- Product Quantity -->
+                    <div class="card-quantity">Available: {{ product.quantity }}</div>
+
+                    <form action="{{ url_for('retailer_add_cart') }}" method="POST">
+                        <input type="hidden" name="product_id" value="{{ product._id }}">
+                        <select name="quantity" class="quantity-dropdown">
+                            {% for i in range(1, product.quantity|int + 1) %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        function addToCart(productId) {
+            const quantity = document.querySelector(`#quantity-${productId}`).value;
+            // Here, you can make an AJAX call to the backend to add the product to the cart
+            alert(`Product ${productId} added to cart with quantity ${quantity}`);
+        }
+    </script>
+</body>
+{% endblock %}

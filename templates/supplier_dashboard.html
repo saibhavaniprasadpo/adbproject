@@ -1,0 +1,122 @@
+{% extends "navbar.html" %}
+
+{% block content %}
+    <title>Supplier Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .dashboard-header {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            padding: 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #ecf0f1;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .card-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: #3498db;
+        }
+        .card-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .card-subtext {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        /* Card color accents */
+        .create-product {
+            border-left: 4px solid #2ecc71;
+        }
+        .view-orders {
+            border-left: 4px solid #2980b9;
+        }
+        .view-payments {
+            border-left: 4px solid #f39c12;
+        }
+        /* Responsive layout */
+        @media screen and (max-width: 1200px) {
+            .card-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media screen and (max-width: 900px) {
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media screen and (max-width: 600px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard-header">
+            Welcome, {{ name }}! <br> Explore your supplier options
+        </div>
+        <div class="card-grid">
+            <!-- Create Product Card -->
+            <div class="card create-product" onclick="window.location.href='/create_product_supplier'">
+                <div class="card-icon">🛠️</div>
+                <div class="card-title">Create Product</div>
+                <div class="card-subtext">Add new products to your inventory</div>
+            </div>
+            
+            <!-- View Orders Card -->
+            <div class="card view-orders" onclick="window.location.href='/supplier_view_orders'">
+                <div class="card-icon">📦</div>
+                <div class="card-title">View Orders</div>
+                <div class="card-subtext">Check the status of your orders</div>
+            </div>
+
+            <!-- View Payments Card -->
+            <div class="card view-payments" onclick="window.location.href='/sup_payment_table'">
+                <div class="card-icon">💰</div>
+                <div class="card-title">View Payments</div>
+                <div class="card-subtext">Manage your received payments</div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}

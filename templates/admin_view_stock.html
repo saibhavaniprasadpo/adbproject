@@ -1,0 +1,66 @@
+{% extends "navbar.html" %}
+
+{% block content %}
+    <title>Admin - View Stock</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .update-price {
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin - Product Stock</h1>
+    
+    {% if products %}
+        <form method="POST" action="/update-price">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Description</th>
+                        <th>Product Type</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Distributor</th>
+                        <th>Supplier Name</th>
+                        <th>Update Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                        <tr>
+                            <td>{{ product.product_name }}</td>
+                            <td>{{ product.description }}</td>
+                            <td>{{ product.product_type }}</td>
+                            <td>${{ product.price }}</td>
+                            <td>{{ product.quantity }}</td>
+                            <td>{{ product.distributor }}</td>
+                            <td>{{ product.supplier_name }}</td>
+                            <td>
+                                <input type="text" name="new_price_{{ product._id }}" class="update-price" placeholder="Enter new price">
+                                <input type="hidden" name="product_id_{{ product._id }}" value="{{ product._id }}">
+                                <button type="submit" name="update_price" value="{{ product._id }}">Update Price</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
+    {% else %}
+        <p>No products found.</p>
+    {% endif %}
+</body>
+{% endblock %}

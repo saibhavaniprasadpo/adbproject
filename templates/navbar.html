@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Navbar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-left a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 18px;
+        }
+
+        .navbar-left a:hover {
+            color: #3498db;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-right a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 18px;
+        }
+
+        .navbar-right a:hover {
+            color: #3498db;
+        }
+
+        .logout-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        .navbar-left p {
+            color: white; /* White color */
+            font-weight: bold; /* Bold text */
+            font-size: 20px; /* Adjust the size if needed */
+            margin: 0; /* Remove default margin */
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-left">
+            <p class="navbar-item">Warehouse Management</p>
+        </div>
+
+        <div class="navbar-right">
+            {% if session['role'] == 'admin' %}
+                <a href="/admin_dashboard" class="navbar-item">Home</a>
+            {% elif session['role'] == 'supplier' %}
+                <a href="/create_product_supplier" class="navbar-item">Add</a>
+                <a href="/supplier_view_orders" class="navbar-item">Orders</a>
+                <a href="/sup_payment_table" class="navbar-item">Payments</a>
+            {% elif session['role'] == 'retailer' %}
+                <a href="/retailer_browse_products" class="navbar-item">Create</a>
+                <a href="/retailer_view_cart" class="navbar-item">Cart</a>
+                <a href="/retailer_view_orders" class="navbar-item">Orders</a>
+                <a href="/ret_payment_table" class="navbar-item">Payments</a>
+            {% endif %}
+            <a href="/logout" class="logout-btn">Logout</a>
+        </div>
+    </div>
+
+    <!-- The content will be rendered here -->
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

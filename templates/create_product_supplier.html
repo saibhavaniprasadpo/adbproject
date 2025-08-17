@@ -1,0 +1,186 @@
+{% extends "navbar.html" %}
+
+{% block content %}
+<title>Create Product - Supplier</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    /* Add your existing CSS styles here */
+</style>
+</head>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f7f7f7;
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+    .container {
+        max-width: 800px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .form-title {
+        font-size: 28px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 30px;
+        text-align: center;
+        letter-spacing: 1px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+        position: relative;
+    }
+    label {
+        font-weight: 600;
+        margin-bottom: 5px;
+        display: block;
+    }
+    input, select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ecf0f1;
+        border-radius: 6px;
+        font-size: 16px;
+        background-color: #f9f9f9;
+        color: #333;
+        transition: all 0.3s ease;
+    }
+    input:focus, select:focus {
+        border-color: #3498db;
+        outline: none;
+        background-color: #fff;
+    }
+    .input-icon {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 18px;
+        color: #7f8c8d;
+    }
+    button {
+        background-color: #3498db;
+        color: #fff;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 6px;
+        font-size: 18px;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.3s ease;
+    }
+    button:hover {
+        background-color: #2980b9;
+    }
+    .form-footer {
+        text-align: center;
+        margin-top: 20px;
+    }
+    .form-footer a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .form-footer a:hover {
+        text-decoration: underline;
+    }
+</style>
+<body>
+
+<div class="container">
+    <div class="form-title">
+        Create Product - Supplier
+    </div>
+    <form action="/create_product_supplier" method="POST">
+        <!-- Product Name -->
+        <div class="form-group">
+            <label for="product_name">Product Name</label>
+            <input type="text" id="product_name" name="product_name" placeholder="Enter product name" required>
+            <div class="input-icon">
+                <i class="fas fa-box"></i>
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" id="description" name="description" placeholder="Enter product description" required>
+            <div class="input-icon">
+                <i class="fas fa-pen"></i>
+            </div>
+        </div>
+
+        <!-- Product Type Dropdown -->
+        <div class="form-group">
+            <label for="product_type">Product Type</label>
+            <select id="product_type" name="product_type" required>
+                <option value="printer">Printer</option>
+                <option value="laptop">Laptop</option>
+                <option value="monitor">Monitor</option>
+                <option value="phone">Phone</option>
+                <option value="peripheral">Peripheral</option>
+            </select>
+            <div class="input-icon">
+                <i class="fas fa-cogs"></i>
+            </div>
+        </div>
+
+        <!-- Price -->
+        <div class="form-group">
+            <label for="price">Price</label>
+            <input type="number" id="price" name="price" placeholder="Enter product price" required>
+            <div class="input-icon">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+        </div>
+
+        <!-- Quantity Available -->
+        <div class="form-group">
+            <label for="quantity">Quantity Available</label>
+            <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" required oninput="generateSerialFields()">
+            <div class="input-icon">
+                <i class="fas fa-cogs"></i>
+            </div>
+        </div>
+
+        <!-- Serial Numbers -->
+        <div id="serial-numbers-container" class="form-group">
+            <!-- Dynamic input fields will be generated here -->
+        </div>
+
+        <!-- Create Button -->
+        <button type="submit">Create Product</button>
+    </form>
+
+    <div class="form-footer">
+        <p>Want to go back? <a href="/dashboard_supplier">Go to Dashboard</a></p>
+    </div>
+</div>
+
+<script>
+    function generateSerialFields() {
+        const quantity = document.getElementById('quantity').value;
+        const container = document.getElementById('serial-numbers-container');
+        container.innerHTML = ''; // Clear previous fields
+
+        if (quantity && quantity > 0) {
+            for (let i = 0; i < quantity; i++) {
+                const inputField = document.createElement('input');
+                inputField.type = 'text';
+                inputField.name = `serial_number_${i + 1}`;
+                inputField.placeholder = `Enter serial number ${i + 1}`;
+                inputField.classList.add('form-control');
+                inputField.style.marginBottom = '10px';
+                container.appendChild(inputField);
+            }
+        }
+    }
+</script>
+
+</body>
+{% endblock %}

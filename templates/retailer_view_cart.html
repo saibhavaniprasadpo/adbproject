@@ -1,0 +1,172 @@
+{% extends "navbar.html" %}
+
+{% block content %}
+    <title>Admin Cart</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .cart-header {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Grid Layout */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 1px solid #ecf0f1;
+            max-height: 400px;
+            min-height: 350px;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+        .card-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+            color: #3498db;
+        }
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .card-subtext {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 5px;
+            text-align: center;
+            padding: 0 10px;
+        }
+        .card-price, .card-quantity {
+            font-size: 16px;
+            margin-top: 10px;
+            color: #e74c3c;
+        }
+
+        /* Total Amount and Checkout */
+        .cart-header h3 {
+            font-size: 24px;
+            color: #2c3e50;
+        }
+
+        .checkout-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #27ae60;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            background-color: #2ecc71;
+        }
+
+        /* Responsive Layout */
+        @media screen and (max-width: 1200px) {
+            .card-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        @media screen and (max-width: 900px) {
+            .card-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media screen and (max-width: 600px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="cart-header">
+            <h2>Admin Cart</h2>
+            <h3>Total Amount: ${{ grand_total }}</h3>
+            <form method="POST" action="/admin_payment">
+                <input type="hidden" name="id" value="{{admin_email}}">
+                <input type="hidden" name="total" value="{{grand_total}}">
+                <button class="checkout-btn">Checkout</button>
+            </form>
+        </div>
+
+        <!-- Card Grid for Cart Items -->
+        <div class="card-grid">
+            {% for item in cart %}
+            <div class="card">
+                <!-- Product Icon based on Product Type -->
+                <div class="card-icon">
+                    {% if item.product_type == 'printer' %}
+                        🖨️
+                    {% elif item.product_type == 'laptop' %}
+                        💻
+                    {% elif item.product_type == 'monitor' %}
+                        🖥️
+                    {% elif item.product_type == 'phone' %}
+                        📱
+                    {% elif item.product_type == 'peripheral' %}
+                        🎮
+                    {% else %}
+                        📦
+                    {% endif %}
+                </div>
+                <!-- Product Name -->
+                <div class="card-title">{{ item.product_name }}</div>
+                <!-- Product Description -->
+                <div class="card-subtext">{{ item.description }}</div>
+                <!-- Product Price -->
+                <div class="card-price">Price: ${{ item.price }}</div>
+                <!-- Product Quantity -->
+                <div class="card-quantity">Quantity: {{ item.quantity }}</div>
+                <!-- Product Total Price -->
+                <div class="card-quantity">Total Price: ${{ item.total_price }}</div>
+
+                <!-- Delete Button (Form for DELETE) -->
+                <form method="POST" action="/retailer_delete_cart_item">
+                    <input type="hidden" name="product_id" value="{{ item.product_id }}">
+                    <button type="submit" class="btn btn-danger" style="background-color: #e74c3c; color: white; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer;">
+                        Delete
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+{% endblock %}

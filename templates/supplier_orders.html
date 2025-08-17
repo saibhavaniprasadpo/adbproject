@@ -1,0 +1,117 @@
+{% extends "navbar.html" %}
+
+{% block content %}
+    <title>Supplier Products</title>
+    <style>
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 90%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-left: 5%;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .update-status-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        select, button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .no-products {
+            text-align: center;
+            color: #666;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Orders and Products for Supplier</h1>
+    {% if all_products %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th>Update Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in all_products %}
+                    <tr>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.quantity }}</td>
+                        <td>{{ product.price }}</td>
+                        <td>{{ product.total_price }}</td>
+                        <td>{{ product.status }}</td>
+                        <td>
+                            <form action="/update-product-status" method="POST">
+                                <input type="hidden" name="order_id" value="{{ product.order_id }}">
+                                <input type="hidden" name="product_id" value="{{ product.product_id }}">
+                                <input type="hidden" name="total_price" value="{{ product.total_price }}">
+                                <input type="hidden" name="quantity" value="{{ product.quantity }}">
+                                
+                                <select name="status">
+                                    <option value="packed" {% if product.status == 'packed' %}selected{% endif %}>Packed</option>
+                                    <option value="in-transit" {% if product.status == 'in-transit' %}selected{% endif %}>In Transit</option>
+                                    <option value="delivered" {% if product.status == 'delivered' %}selected{% endif %}>Delivered</option>
+                                </select>
+                                {% if product.status == 'delivered' %}<button type="submit" disabled>Delivered</button>
+                                {% else %}
+                                <button type="submit" >Update</button>
+                                {% endif %}
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No products found for this supplier.</p>
+    {% endif %}
+</body>
+{% endblock %}
